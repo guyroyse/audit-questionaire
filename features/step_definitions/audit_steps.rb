@@ -19,3 +19,18 @@ When /^I select "([^"]*)"$/ do |answer|
   @audit.select(answer)
 end
 
+Then /^I should see a total score of (\d+)$/ do |total|
+  @audit.total.should == total
+end
+
+Then /^I should see a consumption score of (\d+)$/ do |consumption|
+  @audit.consumption.should == consumption
+end
+
+Then /^I should see a dependence score of (\d+)$/ do |dependence|
+  @audit.dependence.should == dependence
+end
+
+Then /^I should see a problems score (\d+)$/ do |problems|
+  @audit.problems.should == problems
+end
