@@ -63,7 +63,7 @@ $(function() {
     // TODO: demasiado duplicacion aqui
     var questionsAndAnswers = [
       { 
-    	question: "How often do you have a drink containing alcohol?", 
+        text: "How often do you have a drink containing alcohol?", 
         answers: ["Never", "Monthly or less", "2-4 times a month", "2-3 times a week", "4 or more times a week"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -73,7 +73,7 @@ $(function() {
         }
       },
       { 
-    	question: "How many standard drinks do you have on a typical day when you are drinking?",  
+    	text: "How many standard drinks do you have on a typical day when you are drinking?",  
         answers: ["1 or 2", "3 or 4", "5 or 6", "7 to 9", "10 or more"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -83,7 +83,7 @@ $(function() {
         }
       },
       {
-    	question: "How often do you have six or more standard drinks on one occasion?",  
+    	text: "How often do you have six or more standard drinks on one occasion?",  
         answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -93,7 +93,7 @@ $(function() {
         }
       },
       {
-    	question: "How often during the last year have you found that you were not able to stop drinking once you had started?",  
+    	text: "How often during the last year have you found that you were not able to stop drinking once you had started?",  
         answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -103,17 +103,7 @@ $(function() {
         }
       },
       { 
-    	question: "How often during the last year have you failed to do what was normally expected of you because of drinking?",  
-        answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
-        values: [0, 1, 2, 3, 4],
-        select: function(answer) {
-        	index = this.answers.indexOf(answer);
-        	total += this.values[index];
-        	dependence += this.values[index];
-        }
-      },
-      {
-    	question: "How often during the last year have you needed a first drink in the morning to get yourself going after a heavy drinking session?",  
+    	text: "How often during the last year have you failed to do what was normally expected of you because of drinking?",  
         answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -123,7 +113,17 @@ $(function() {
         }
       },
       {
-    	question: "How often during the last year have you has a feeling of guilt or remorse after drinking?",  
+    	text: "How often during the last year have you needed a first drink in the morning to get yourself going after a heavy drinking session?",  
+        answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
+        values: [0, 1, 2, 3, 4],
+        select: function(answer) {
+        	index = this.answers.indexOf(answer);
+        	total += this.values[index];
+        	dependence += this.values[index];
+        }
+      },
+      {
+    	text: "How often during the last year have you has a feeling of guilt or remorse after drinking?",  
         answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -133,7 +133,7 @@ $(function() {
         }
       },
       { 
-    	question: "How often during the last year have you been unable to remember what happened the night before because you had been drinking?",  
+    	text: "How often during the last year have you been unable to remember what happened the night before because you had been drinking?",  
         answers: ["Never", "Less than monthly", "Monthly", "Weekly", "Daily or almost daily"],
         values: [0, 1, 2, 3, 4],
         select: function(answer) {
@@ -143,7 +143,7 @@ $(function() {
         }
       },
       { 
-    	question: "Have you or someone else been injured because of your drinking?",
+    	text: "Have you or someone else been injured because of your drinking?",
         answers: ["No", "Yes, but not in the last year", "Yes, during the last year"],
         values: [0, 2, 4],
         select: function(answer) {
@@ -153,7 +153,7 @@ $(function() {
         }
       },
       { 
-    	question: "Has a relative, friend, doctor, or other health care worker been concerned about your drinking or suggested you cut down?",
+    	text: "Has a relative, friend, doctor, or other health care worker been concerned about your drinking or suggested you cut down?",
         answers: ["No", "Yes, but not in the last year", "Yes, during the last year"],
         values: [0, 2, 4],
         select: function(answer) {
@@ -167,8 +167,9 @@ $(function() {
     var current = 0;
     
     return {
-      question : function() { return questionsAndAnswers[current].question; },
-      answers : function() { return questionsAndAnswers[current].answers; },
+      question : function() {
+        return questionsAndAnswers[current];
+      },
       totalScore : function() { return total; },
       consumptionScore : function() { return consumption; },
       dependenceScore : function () { return dependence; },
@@ -177,7 +178,7 @@ $(function() {
         return current >= questionsAndAnswers.length;
       },
       nextQuestion : function(answer) {
-        if (current < questionsAndAnswers.length ) {
+        if (!this.lastQuestion()) {
     	  questionsAndAnswers[current].select(answer);
           current++;
         }
@@ -189,8 +190,8 @@ $(function() {
   var controller = (function() {
 
     var setQuestionAndAnswer = function() {
-      view.setQuestion(model.question());
-      view.addAnswers(model.answers());
+      view.setQuestion(model.question().text);
+      view.addAnswers(model.question().answers);
     };
 
     var setAndShowResults = function() {
