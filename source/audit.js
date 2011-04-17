@@ -167,20 +167,20 @@ $(function() {
     var current = 0;
     
     return {
-      question : function() { return questionsAndAnswers[current].question },
-      answers : function() { return questionsAndAnswers[current].answers },
-      select : function(answer) {
-    	questionsAndAnswers[current].select(answer);
-        current++;
-        // TODO: el modelo habla con la vista... doh!
-        if (current === questionsAndAnswers.length) {
-        	view.hideQuestions();
-        	view.showResults();
-        	view.setTotal(total);
-        	view.setConsumption(consumption);
-        	view.setDependence(dependence);
-        	view.setProblems(problems);
-        };
+      question : function() { return questionsAndAnswers[current].question; },
+      answers : function() { return questionsAndAnswers[current].answers; },
+      totalScore : function() { return total; },
+      consumptionScore : function() { return consumption; },
+      dependenceScore : function () { return dependence; },
+      problemsScore : function() { return problems; },
+      lastQuestion : function() {
+        return current >= questionsAndAnswers.length;
+      },
+      nextQuestion : function(answer) {
+        if (current < questionsAndAnswers.length ) {
+    	  questionsAndAnswers[current].select(answer);
+          current++;
+        }
       }
     };
 
@@ -193,14 +193,27 @@ $(function() {
       view.addAnswers(model.answers());
     };
 
+    var setAndShowResults = function() {
+      view.hideQuestions();
+      view.showResults();
+      view.setTotal(model.totalScore());
+      view.setConsumption(model.consumptionScore());
+      view.setDependence(model.dependenceScore());
+      view.setProblems(model.problemsScore());
+    };
+
     return {
       onLoad : function() {
     	view.hideResults();
         setQuestionAndAnswer();
       },
       onClick : function(answer) {
-    	model.select(answer);
-        setQuestionAndAnswer();
+        model.nextQuestion(answer);
+        if (!model.lastQuestion()) {
+          setQuestionAndAnswer();
+        } else {
+          setAndShowResults();
+        }
       }
     };
 
