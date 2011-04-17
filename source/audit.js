@@ -167,7 +167,7 @@ $(function() {
     var current = 0;
     
     return {
-      question : function() {
+      currentQuestion : function() {
         return questionsAndAnswers[current];
       },
       totalScore : function() { return total; },
@@ -190,8 +190,8 @@ $(function() {
   var controller = (function() {
 
     var setQuestionAndAnswer = function() {
-      view.setQuestion(model.question().text);
-      view.addAnswers(model.question().answers);
+      view.setQuestion(model.currentQuestion().text);
+      view.addAnswers(model.currentQuestion().answers);
     };
 
     var setAndShowResults = function() {
