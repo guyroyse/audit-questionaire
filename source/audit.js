@@ -4,17 +4,29 @@ $(function() {
 
     var answerList = $('#answers');
 
+    var removeOldAnswers = function() {
+      $('.answer').remove();
+    };
+
+    var addNewAnswers = function(answers) {
+      answers.forEach(function(answer) {
+        addNewAnswer(answer);
+      });
+    };
+
+    var addNewAnswer = function(answer) {
+      var li = $('<li/>').text(answer);
+      li.addClass('answer');
+      answerList.append(li);
+    };
+
     return {
       setQuestion : function(question) {
         $('#question').text(question);
       },
       addAnswers : function(answers) {
-        $('.answer').remove();
-        answers.forEach(function(answer) {
-          var li = $('<li/>').text(answer);
-          li.addClass('answer');
-          answerList.append(li);
-        });
+        removeOldAnswers();
+        addNewAnswers(answers);
       },
       hideQuestions : function() { 
         $('#questions').hide(); 
@@ -43,11 +55,12 @@ $(function() {
 
   var model = (function() {
 
-	var total = 0;
-	var consumption = 0;
-	var dependence = 0;
-	var problems = 0;
-	  
+    var total = 0;
+    var consumption = 0;
+    var dependence = 0;
+    var problems = 0;
+
+    // TODO: demasiado duplicacion aqui
     var questionsAndAnswers = [
       { 
     	question: "How often do you have a drink containing alcohol?", 
@@ -159,6 +172,7 @@ $(function() {
       select : function(answer) {
     	questionsAndAnswers[current].select(answer);
         current++;
+        // TODO: el modelo habla con la vista... doh!
         if (current === questionsAndAnswers.length) {
         	view.hideQuestions();
         	view.showResults();
